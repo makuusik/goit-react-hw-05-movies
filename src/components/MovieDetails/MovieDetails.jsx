@@ -43,8 +43,13 @@ function MovieDetails() {
         );
         const data = await response.json();
         setMovieDetails(data);
-        setBannerUrl(`https://image.tmdb.org/t/p/w400${data.poster_path}`);
 
+        // Проверяем, что poster_path не равен null или undefined, прежде чем формировать URL
+        const bannerUrl = data.poster_path
+          ? `https://image.tmdb.org/t/p/w400${data.poster_path}`
+          : '';
+
+        setBannerUrl(bannerUrl);
         setUserScore(data.vote_average);
         setGenres(data.genres);
       } catch (error) {
@@ -58,7 +63,6 @@ function MovieDetails() {
   const handleLoadCast = async () => {
     setIsCastVisible(true);
     setIsReviewsVisible(false);
-
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=d1dfca7263a34b455ce782b15afff09a`
@@ -68,14 +72,11 @@ function MovieDetails() {
     } catch (error) {
       console.error('Error fetching cast:', error);
     }
-
-    window.history.pushState({}, '', `/movies/${movieId}/cast`);
   };
 
   const handleLoadReviews = async () => {
     setIsCastVisible(false);
     setIsReviewsVisible(true);
-
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=d1dfca7263a34b455ce782b15afff09a&language=en-US&page=1`
@@ -89,8 +90,6 @@ function MovieDetails() {
     } catch (error) {
       console.error('Error fetching reviews:', error);
     }
-
-    window.history.pushState({}, '', `/movies/${movieId}/reviews`);
   };
 
   return (
