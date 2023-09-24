@@ -1,11 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const Home = lazy(() => import('./Home/Home'));
 const Movies = lazy(() => import('./Movies/Movies'));
@@ -14,15 +8,13 @@ const Cast = lazy(() => import('./Cast/Cast'));
 const Reviews = lazy(() => import('./Reviews/Reviews'));
 
 function App() {
-  const location = useLocation();
-
   return (
-    <Router basename={location.pathname || ''}>
+    <Router>
       <div>
         <main>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
-              <Route path="goit-react-hw-05-movies/" element={<Home />} />
+              <Route path="/goit-react-hw-05-movies" element={<Home />} />
               <Route
                 path="goit-react-hw-05-movies/movies"
                 element={<Movies />}
@@ -39,8 +31,6 @@ function App() {
                 path="goit-react-hw-05-movies/movies/:movieId/reviews"
                 element={<Reviews />}
               />
-              {}
-              <Navigate to="goit-react-hw-05-movies/" />
             </Routes>
           </Suspense>
         </main>
