@@ -20,7 +20,7 @@ function Home() {
     fetchTrendingMovies();
   }, []);
 
-  const isHome = useMatch('/goit-react-hw-05-movies');
+  const isHome = useMatch('/goit-react-hw-05-movies/');
 
   return (
     <div>
