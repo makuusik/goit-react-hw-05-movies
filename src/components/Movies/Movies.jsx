@@ -32,7 +32,7 @@ function Movies() {
   return (
     <div>
       <h1>Movies</h1>
-      <Link to="/">Go to Home</Link>
+      <Link to="/goit-react-hw-05-movies">Go to Home</Link>
       <input
         type="text"
         placeholder="Search movies..."

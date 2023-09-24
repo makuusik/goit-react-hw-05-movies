@@ -44,7 +44,6 @@ function MovieDetails() {
         const data = await response.json();
         setMovieDetails(data);
 
-        // Проверяем, что poster_path не равен null или undefined, прежде чем формировать URL
         const bannerUrl = data.poster_path
           ? `https://image.tmdb.org/t/p/w400${data.poster_path}`
           : '';
@@ -94,7 +93,7 @@ function MovieDetails() {
 
   return (
     <Container>
-      <Link to="/">Go back</Link>
+      <Link to="/goit-react-hw-05-movies">Go back</Link>
       <InfoContainer>
         <Poster src={bannerUrl} alt={movieDetails.title} />
         <Info>

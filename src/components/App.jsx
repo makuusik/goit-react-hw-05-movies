@@ -14,7 +14,7 @@ function App() {
         <main>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
-              <Route path="goit-react-hw-05-movies/" element={<Home />} />
+              <Route path="/" element={<Home />} />
               <Route
                 path="goit-react-hw-05-movies/movies"
                 element={<Movies />}
