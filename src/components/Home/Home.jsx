@@ -47,7 +47,7 @@ function RouteTitle({ title }) {
   useEffect(() => {
     document.title = title;
     return () => {
-      document.title = 'Default Title'; // Установите ваш заголовок по умолчанию
+      document.title = 'dd';
     };
   }, [title]);
 
