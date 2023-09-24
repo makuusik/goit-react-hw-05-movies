@@ -22,25 +22,25 @@ function App() {
         <main>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
-              <Route path="/goit-react-hw-05-movies" element={<Home />} />
+              <Route path="goit-react-hw-05-movies/" element={<Home />} />
               <Route
-                path="/goit-react-hw-05-movies/movies"
+                path="goit-react-hw-05-movies/movies"
                 element={<Movies />}
               />
               <Route
-                path="/goit-react-hw-05-movies/movies/:movieId"
+                path="goit-react-hw-05-movies/movies/:movieId"
                 element={<MovieDetails />}
               />
               <Route
-                path="/goit-react-hw-05-movies/movies/:movieId/cast"
+                path="goit-react-hw-05-movies/movies/:movieId/cast"
                 element={<Cast />}
               />
               <Route
-                path="/goit-react-hw-05-movies/movies/:movieId/reviews"
+                path="goit-react-hw-05-movies/movies/:movieId/reviews"
                 element={<Reviews />}
               />
               {}
-              <Navigate to="/goit-react-hw-05-movies" />
+              <Navigate to="goit-react-hw-05-movies/" />
             </Routes>
           </Suspense>
         </main>
