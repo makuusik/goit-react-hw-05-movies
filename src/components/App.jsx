@@ -1,5 +1,11 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+} from 'react-router-dom';
 
 const Home = lazy(() => import('./Home/Home'));
 const Movies = lazy(() => import('./Movies/Movies'));
@@ -8,29 +14,33 @@ const Cast = lazy(() => import('./Cast/Cast'));
 const Reviews = lazy(() => import('./Reviews/Reviews'));
 
 function App() {
+  const location = useLocation();
+
   return (
-    <Router>
+    <Router basename={location.pathname || ''}>
       <div>
         <main>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
-              <Route path="goit-react-hw-05-movies/" element={<Home />} />
+              <Route path="/goit-react-hw-05-movies" element={<Home />} />
               <Route
-                path="goit-react-hw-05-movies/movies"
+                path="/goit-react-hw-05-movies/movies"
                 element={<Movies />}
               />
               <Route
-                path="goit-react-hw-05-movies/movies/:movieId"
+                path="/goit-react-hw-05-movies/movies/:movieId"
                 element={<MovieDetails />}
               />
               <Route
-                path="goit-react-hw-05-movies/movies/:movieId/cast"
+                path="/goit-react-hw-05-movies/movies/:movieId/cast"
                 element={<Cast />}
               />
               <Route
-                path="goit-react-hw-05-movies/movies/:movieId/reviews"
+                path="/goit-react-hw-05-movies/movies/:movieId/reviews"
                 element={<Reviews />}
               />
+              {}
+              <Navigate to="/goit-react-hw-05-movies" />
             </Routes>
           </Suspense>
         </main>
