@@ -17,7 +17,7 @@ function Movies() {
           const data = await response.json();
           setMovies(data.results);
 
-          navigate(`/movies?search=${searchQuery}`);
+          navigate(`/goit-react-hw-05-movies/movies/?search=${searchQuery}`);
         } else {
           console.error('Failed to fetch movies:', response.status);
         }
@@ -43,7 +43,9 @@ function Movies() {
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+            <Link to={`/goit-react-hw-05-movies/movies/${movie.id}`}>
+              {movie.title}
+            </Link>
           </li>
         ))}
       </ul>

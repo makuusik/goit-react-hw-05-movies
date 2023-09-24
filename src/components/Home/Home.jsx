@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 
 function Home() {
   const [trendingMovies, setTrendingMovies] = useState([]);
@@ -20,22 +20,38 @@ function Home() {
     fetchTrendingMovies();
   }, []);
 
+  const isHome = useMatch('/goit-react-hw-05-movies');
+
   return (
     <div>
-      <h1>Trending today</h1>
       {}
-      <Link to="/movies">
+      {isHome && <RouteTitle title="home" />}
+      <h1>Trending today</h1>
+      <Link to="/goit-react-hw-05-movies/movies">
         <button>Explore Movies</button>
       </Link>
       <ul>
         {trendingMovies.map(movie => (
           <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+            <Link to={`/goit-react-hw-05-movies/movies/${movie.id}`}>
+              {movie.title}
+            </Link>
           </li>
         ))}
       </ul>
     </div>
   );
+}
+
+function RouteTitle({ title }) {
+  useEffect(() => {
+    document.title = title;
+    return () => {
+      document.title = 'Default Title'; // Установите ваш заголовок по умолчанию
+    };
+  }, [title]);
+
+  return null;
 }
 
 export default Home;
