@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 function Movies() {
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSearch = async () => {
     if (searchQuery) {
@@ -16,8 +17,7 @@ function Movies() {
         if (response.ok) {
           const data = await response.json();
           setMovies(data.results);
-
-          navigate(`/goit-react-hw-05-movies/movies/?search=${searchQuery}`);
+          navigate(`/movies?search=${searchQuery}`);
         } else {
           console.error('Failed to fetch movies:', response.status);
         }
@@ -29,10 +29,19 @@ function Movies() {
     }
   };
 
+  const goBack = () => {
+    if (location.pathname.startsWith('/')) {
+      navigate(`/`);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <div>
       <h1>Movies</h1>
-      <Link to="/goit-react-hw-05-movies">Go to Home</Link>
+      {}
+      <button onClick={goBack}>Go back</button>
       <input
         type="text"
         placeholder="Search movies..."
@@ -43,7 +52,10 @@ function Movies() {
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
-            <Link to={`/goit-react-hw-05-movies/movies/${movie.id}`}>
+            <Link
+              to={`/movies/${movie.id}`}
+              state={{ fromSearch: searchQuery }}
+            >
               {movie.title}
             </Link>
           </li>

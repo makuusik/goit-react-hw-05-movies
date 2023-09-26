@@ -20,22 +20,20 @@ function Home() {
     fetchTrendingMovies();
   }, []);
 
-  const isHome = useMatch('/goit-react-hw-05-movies/');
+  const isHome = useMatch('/');
 
   return (
     <div>
       {}
       {isHome && <RouteTitle title="home" />}
       <h1>Trending today</h1>
-      <Link to="/goit-react-hw-05-movies/movies">
+      <Link to="/movies">
         <button>Explore Movies</button>
       </Link>
       <ul>
         {trendingMovies.map(movie => (
           <li key={movie.id}>
-            <Link to={`/goit-react-hw-05-movies/movies/${movie.id}`}>
-              {movie.title}
-            </Link>
+            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
           </li>
         ))}
       </ul>

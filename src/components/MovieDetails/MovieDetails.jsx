@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   InfoContainer,
@@ -10,7 +10,6 @@ import {
   UserScore,
   Genres,
   ButtonContainer,
-  Button,
   CastContainer,
   Actor,
   ActorImage,
@@ -25,15 +24,14 @@ import {
 
 function MovieDetails() {
   const { movieId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [movieDetails, setMovieDetails] = useState({});
   const [cast, setCast] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [bannerUrl, setBannerUrl] = useState('');
   const [userScore, setUserScore] = useState(null);
   const [genres, setGenres] = useState([]);
-
-  const [isCastVisible, setIsCastVisible] = useState(false);
-  const [isReviewsVisible, setIsReviewsVisible] = useState(false);
 
   useEffect(() => {
     async function fetchMovieDetails() {
@@ -59,41 +57,49 @@ function MovieDetails() {
     fetchMovieDetails();
   }, [movieId]);
 
-  const handleLoadCast = async () => {
-    setIsCastVisible(true);
-    setIsReviewsVisible(false);
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=d1dfca7263a34b455ce782b15afff09a`
-      );
-      const data = await response.json();
-      setCast(data.cast);
-    } catch (error) {
-      console.error('Error fetching cast:', error);
-    }
-  };
-
-  const handleLoadReviews = async () => {
-    setIsCastVisible(false);
-    setIsReviewsVisible(true);
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=d1dfca7263a34b455ce782b15afff09a&language=en-US&page=1`
-      );
-      if (response.ok) {
+  useEffect(() => {
+    async function fetchMovieCast() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=d1dfca7263a34b455ce782b15afff09a`
+        );
         const data = await response.json();
-        setReviews(data.results);
-      } else {
-        console.error('Failed to fetch reviews:', response.status);
+        setCast(data.cast);
+      } catch (error) {
+        console.error('Error fetching cast:', error);
       }
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
     }
+
+    async function fetchMovieReviews() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=d1dfca7263a34b455ce782b15afff09a&language=en-US&page=1`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setReviews(data.results);
+        } else {
+          console.error('Failed to fetch reviews:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    }
+
+    if (location.pathname.endsWith('/cast')) {
+      fetchMovieCast();
+    } else if (location.pathname.endsWith('/reviews')) {
+      fetchMovieReviews();
+    }
+  }, [movieId, location.pathname]);
+
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   return (
     <Container>
-      <Link to="/goit-react-hw-05-movies">Go back</Link>
+      <button onClick={handleGoBack}>Go back</button>
       <InfoContainer>
         <Poster src={bannerUrl} alt={movieDetails.title} />
         <Info>
@@ -105,11 +111,12 @@ function MovieDetails() {
             </Genres>
           )}
           <Overview>Overview: {movieDetails.overview}</Overview>
+          {}
           <ButtonContainer>
-            <Button onClick={handleLoadCast}>Cast</Button>
-            <Button onClick={handleLoadReviews}>Reviews</Button>
+            <Link to={`/movies/${movieId}/cast`}>Cast</Link>
+            <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
           </ButtonContainer>
-          {isCastVisible && cast.length > 0 && (
+          {location.pathname.endsWith('/cast') && cast.length > 0 && (
             <CastContainer>
               {cast.map(actor => (
                 <Actor key={actor.id}>
@@ -131,25 +138,19 @@ function MovieDetails() {
               ))}
             </CastContainer>
           )}
-          {isReviewsVisible && (
+          {location.pathname.endsWith('/reviews') && (
             <ReviewsContainer>
-              {isReviewsVisible && (
-                <>
-                  {reviews.length === 0 ? (
-                    <p>There are no reviews for this film yet</p>
-                  ) : (
-                    <ul>
-                      {reviews.map(review => (
-                        <Review key={review.id}>
-                          <ReviewAuthor>Author: {review.author}</ReviewAuthor>
-                          <ReviewContent>
-                            Review: {review.content}
-                          </ReviewContent>
-                        </Review>
-                      ))}
-                    </ul>
-                  )}
-                </>
+              {reviews.length === 0 ? (
+                <p>There are no reviews for this film yet</p>
+              ) : (
+                <ul>
+                  {reviews.map(review => (
+                    <Review key={review.id}>
+                      <ReviewAuthor>Author: {review.author}</ReviewAuthor>
+                      <ReviewContent>Review: {review.content}</ReviewContent>
+                    </Review>
+                  ))}
+                </ul>
               )}
             </ReviewsContainer>
           )}
