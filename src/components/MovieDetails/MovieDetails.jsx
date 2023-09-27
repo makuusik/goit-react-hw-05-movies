@@ -26,6 +26,15 @@ function MovieDetails() {
   const { movieId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const navigateBack = () => {
+    if (location.state && location.state.fromSearch) {
+      navigate(`/movies?search=${location.state.fromSearch}`);
+    } else {
+      navigate('/');
+    }
+  };
+
   const [movieDetails, setMovieDetails] = useState({});
   const [cast, setCast] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -93,13 +102,9 @@ function MovieDetails() {
     }
   }, [movieId, location.pathname]);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
   return (
     <Container>
-      <button onClick={handleGoBack}>Go back</button>
+      <button onClick={navigateBack}>Go back</button>
       <InfoContainer>
         <Poster src={bannerUrl} alt={movieDetails.title} />
         <Info>
@@ -111,7 +116,6 @@ function MovieDetails() {
             </Genres>
           )}
           <Overview>Overview: {movieDetails.overview}</Overview>
-          {}
           <ButtonContainer>
             <Link to={`/movies/${movieId}/cast`}>Cast</Link>
             <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>

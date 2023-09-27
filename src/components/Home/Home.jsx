@@ -24,7 +24,6 @@ function Home() {
 
   return (
     <div>
-      {}
       {isHome && <RouteTitle title="home" />}
       <h1>Trending today</h1>
       <Link to="/movies">
