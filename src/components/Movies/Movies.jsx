@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Movies() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,16 +29,9 @@ function Movies() {
   }, []);
 
   useEffect(() => {
-    if (location.state && location.state.searchQuery) {
-      const { searchQuery: stateSearchQuery } = location.state;
-      setSearchQuery(stateSearchQuery);
-      handleSearch(stateSearchQuery);
-    }
-  }, [location.state, handleSearch]);
-
-  useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
     const queryParam = urlSearchParams.get('search');
+
     if (queryParam) {
       setSearchQuery(queryParam);
       handleSearch(queryParam);
@@ -47,24 +40,13 @@ function Movies() {
 
   const handleSubmit = e => {
     e.preventDefault();
-
-    handleSearch(searchQuery);
-  };
-
-  const goBack = () => {
-    if (location.state && location.state.fromSearch) {
-      navigate(`/movies?search=${location.state.fromSearch}`);
-    } else if (location.state && location.state.movieId) {
-      navigate(`/movies/${location.state.movieId}`);
-    } else {
-      navigate('/');
-    }
+    navigate(`/movies?search=${searchQuery}`);
   };
 
   return (
     <div>
+      <Link to="/">Go back</Link>
       <h1>Movies</h1>
-      <button onClick={goBack}>Go back</button>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

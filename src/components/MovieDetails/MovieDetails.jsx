@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import {
   Container,
   InfoContainer,
@@ -25,15 +25,15 @@ import {
 function MovieDetails() {
   const { movieId } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
+  const refToBack = useRef(
+    location.state?.fromSearch
+      ? `/movies?search=${location.state.fromSearch}`
+      : '/'
+  );
 
-  const navigateBack = () => {
-    if (location.state && location.state.fromSearch) {
-      navigate(`/movies?search=${location.state.fromSearch}`);
-    } else {
-      navigate('/');
-    }
-  };
+  // Получаем параметр поиска из URL
+  // const urlSearchParams = new URLSearchParams(location.search);
+  // const searchQuery = urlSearchParams.get('search');
 
   const [movieDetails, setMovieDetails] = useState({});
   const [cast, setCast] = useState([]);
@@ -104,7 +104,7 @@ function MovieDetails() {
 
   return (
     <Container>
-      <button onClick={navigateBack}>Go back</button>
+      <Link to={refToBack.current}>Go back</Link>
       <InfoContainer>
         <Poster src={bannerUrl} alt={movieDetails.title} />
         <Info>
